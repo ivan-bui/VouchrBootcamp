@@ -3,30 +3,28 @@ package com.example.ivanbui.twittersearch;
 /**
  * Created by ivanbui on 2017-05-03.
  */
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class Metadata {
-
-    private String isoLanguageCode;
-    private String resultType;
+public class Entities_ {
+    private Url url;
+    private Description description;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public String getIsoLanguageCode() {
-        return isoLanguageCode;
+    public Url getUrl() {
+        return url;
     }
 
-    public void setIsoLanguageCode(String isoLanguageCode) {
-        this.isoLanguageCode = isoLanguageCode;
+    public void setUrl(Url url) {
+        this.url = url;
     }
 
-    public String getResultType() {
-        return resultType;
+    public Description getDescription() {
+        return description;
     }
 
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
+    public void setDescription(Description description) {
+        this.description = description;
     }
 
     public Map<String, Object> getAdditionalProperties() {
@@ -36,4 +34,5 @@ public class Metadata {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+
 }

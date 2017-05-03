@@ -3,30 +3,20 @@ package com.example.ivanbui.twittersearch;
 /**
  * Created by ivanbui on 2017-05-03.
  */
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Metadata {
-
-    private String isoLanguageCode;
-    private String resultType;
+public class Description {
+    private List<Object> urls = null;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public String getIsoLanguageCode() {
-        return isoLanguageCode;
+    public List<Object> getUrls() {
+        return urls;
     }
 
-    public void setIsoLanguageCode(String isoLanguageCode) {
-        this.isoLanguageCode = isoLanguageCode;
-    }
-
-    public String getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
+    public void setUrls(List<Object> urls) {
+        this.urls = urls;
     }
 
     public Map<String, Object> getAdditionalProperties() {

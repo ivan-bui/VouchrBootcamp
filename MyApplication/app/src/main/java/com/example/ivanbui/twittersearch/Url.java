@@ -5,28 +5,20 @@ package com.example.ivanbui.twittersearch;
  */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Metadata {
+public class Url {
 
-    private String isoLanguageCode;
-    private String resultType;
+    private List<Url_> urls = null;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public String getIsoLanguageCode() {
-        return isoLanguageCode;
+    public List<Url_> getUrls() {
+        return urls;
     }
 
-    public void setIsoLanguageCode(String isoLanguageCode) {
-        this.isoLanguageCode = isoLanguageCode;
-    }
-
-    public String getResultType() {
-        return resultType;
-    }
-
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
+    public void setUrls(List<Url_> urls) {
+        this.urls = urls;
     }
 
     public Map<String, Object> getAdditionalProperties() {
@@ -36,4 +28,5 @@ public class Metadata {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+
 }

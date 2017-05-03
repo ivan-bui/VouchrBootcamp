@@ -5,28 +5,29 @@ package com.example.ivanbui.twittersearch;
  */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Metadata {
+public class Hashtag {
 
-    private String isoLanguageCode;
-    private String resultType;
+    private String text;
+    private List<Integer> indices = null;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public String getIsoLanguageCode() {
-        return isoLanguageCode;
+    public String getText() {
+        return text;
     }
 
-    public void setIsoLanguageCode(String isoLanguageCode) {
-        this.isoLanguageCode = isoLanguageCode;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public String getResultType() {
-        return resultType;
+    public List<Integer> getIndices() {
+        return indices;
     }
 
-    public void setResultType(String resultType) {
-        this.resultType = resultType;
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
     }
 
     public Map<String, Object> getAdditionalProperties() {
