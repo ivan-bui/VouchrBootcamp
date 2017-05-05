@@ -4,6 +4,7 @@ package com.example.ivanbui.twittersearch;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
@@ -11,7 +12,6 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import okhttp3.Route;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -19,7 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * Created by markhetherington on 2017-05-02.
@@ -40,10 +43,16 @@ public class TwitterServiceBuilder {
         }
     }
 
+
     public interface TwitterService {
 
+        @GET("/1.1/search/tweets.json")
+        Call<SearchResponse> page(@Query("q") String search,
+                                  @Query("max_id") String maxId,
+                                  @Query("since_id") String sinceId);
+
         @GET("/1.1/search/tweets.json?include_entities=true")
-        Call<ResponseBody> search(@Query("q") String search);
+        Call<SearchResponse> search(@Query("q") String search);
 
         @POST("/oauth2/token?grant_type=client_credentials")
         Call<AuthToken> auth(@Header("Authorization") String credentials);
