@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
     private String maxId = "";
     private String sinceId = "";
+    private String nextResults;
     private boolean paging = false;
 
     @Override
@@ -64,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-                if(dy > 0){
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
                     visibleItemCount = mLayoutManager.getChildCount();
                     totalItemCount = mLayoutManager.getItemCount();
                     pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
@@ -84,9 +85,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private String nextResults;
-
-    private void pageTwitter(){
+    /**
+     * Request next set of results
+     */
+    private void pageTwitter() {
         progressBar.setVisibility(View.VISIBLE);
         try {
             TwitterServiceBuilder.getTwitterService().page(searchTerm, maxId, sinceId).enqueue(new Callback<SearchResponse>() {
@@ -121,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hides the keyboard when clicking away from editText field
+     */
     public void clickHandler(View view) {
         if (editText != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -129,12 +134,15 @@ public class MainActivity extends AppCompatActivity {
         searchTwitter();
     }
 
+    /**
+     * Queries against the indices of recent or popular Tweets using editText value
+     */
     private void searchTwitter() {
         data.clear();
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.VISIBLE);
         searchTerm = editText.getText().toString();
-        if (!searchTerm.equals("")){
+        if (!searchTerm.equals("")) {
             TwitterServiceBuilder.getTwitterService().search(searchTerm).enqueue(new Callback<SearchResponse>() {
                 @Override
                 public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {

@@ -12,15 +12,15 @@
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="274dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textColorLink="@android:color/background_dark"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteY="9dp" />
 
     <Button
         android:id="@+id/button"
@@ -29,10 +29,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="Search"
-        app:layout_constraintHorizontal_bias="0.82"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toRightOf="@+id/editText"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="16dp"
+        tools:layout_editor_absoluteY="11dp"
         android:onClick="clickHandler" />
 
     <android.support.v7.widget.RecyclerView
