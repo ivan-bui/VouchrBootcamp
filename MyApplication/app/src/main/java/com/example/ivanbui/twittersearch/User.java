@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class User {
-    @SerializedName("nameTextView")
+    @SerializedName("name")
     private String name;
     @SerializedName("screen_name")
     private String screenName;
