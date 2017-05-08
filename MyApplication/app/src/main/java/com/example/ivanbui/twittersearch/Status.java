@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class Status {
     @SerializedName("id_str")
     private String idStr;
-    @SerializedName("text")
+    @SerializedName("tweetMessageTextView")
     private String mText;
     @SerializedName("user")
     private User user;

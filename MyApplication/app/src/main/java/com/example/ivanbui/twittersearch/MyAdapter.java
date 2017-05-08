@@ -2,7 +2,6 @@ package com.example.ivanbui.twittersearch;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,27 +43,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.TweetHolder>{
 
     class TweetHolder extends RecyclerView.ViewHolder{
 
-        TextView text;
-        TextView name;
-        TextView screenName;
-        ImageView profilePic;
+        TextView tweetMessageTextView;
+        TextView nameTextView;
+        TextView screenNameTextView;
+        ImageView profilePicImageView;
 
         public TweetHolder(View itemView) {
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.tweet);
-            name = (TextView) itemView.findViewById(R.id.name);
-            screenName = (TextView) itemView.findViewById(R.id.screenname);
-            profilePic = (ImageView) itemView.findViewById(R.id.list_image);
+            tweetMessageTextView = (TextView) itemView.findViewById(R.id.tweet);
+            nameTextView = (TextView) itemView.findViewById(R.id.name);
+            screenNameTextView = (TextView) itemView.findViewById(R.id.screenname);
+            profilePicImageView = (ImageView) itemView.findViewById(R.id.list_image);
         }
 
         public void bind(MyTweet tweet) {
-            text.setText(tweet.text);
-            name.setText(tweet.name);
-            screenName.setText(tweet.screenName);
+            tweetMessageTextView.setText(tweet.text);
+            nameTextView.setText(tweet.name);
+            screenNameTextView.setText(tweet.screenName);
 
             String url = tweet.imgUrl;
-            Context context = profilePic.getContext();
-            Picasso.with(context).load(url).into(profilePic);
+            Context context = profilePicImageView.getContext();
+            Picasso.with(context).load(url).into(profilePicImageView);
         }
     }
 
