@@ -29,8 +29,8 @@ import retrofit2.http.Url;
  */
 public class TwitterServiceBuilder {
 
-    public static final String TOKEN = "kB7Y3t6h60Qni0bvg901OHgpo";
-    public static final String SECRET = "mWEnRf2hg9ixxBxI3fU1bsOebgtvTFm8IN6KF0F3ukaFWcmQwn";
+    public static final String TOKEN = "";
+    public static final String SECRET = "";
 
     public static class AuthToken {
         @SerializedName("token_type")
