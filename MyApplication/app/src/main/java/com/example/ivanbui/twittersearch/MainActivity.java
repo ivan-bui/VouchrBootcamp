@@ -2,6 +2,7 @@ package com.example.ivanbui.twittersearch;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,19 +24,19 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String searchTerm = "";
     private ViewGroup tweetContainer;
     private RecyclerView recyclerView;
-    private MyAdapter adapter;
-    private List<MyTweet> data;
     private EditText editText;
     private ProgressBar progressBar;
-    private boolean loading = true;
-    private int pastVisiblesItems, visibleItemCount, totalItemCount;
+
     private LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+    private MyAdapter adapter;
+
+    private String searchTerm = "";
+    private List<MyTweet> data;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
     private String maxId = "";
     private String sinceId = "";
-    private String nextResults;
     private boolean paging = false;
 
     @Override
@@ -43,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = (Button) findViewById(R.id.button);
         progressBar = (ProgressBar) findViewById(R.id.pb);
-        data = new ArrayList<MyTweet>();
+        data = new ArrayList<>();
         editText = (EditText) findViewById(R.id.editText);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -86,31 +86,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Request next set of results
+     * Queries against the indices of recent or popular Tweets using the editText value
      */
-    private void pageTwitter() {
+    private void searchTwitter() {
+        data.clear();
+        adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.VISIBLE);
-        try {
-            TwitterServiceBuilder.getTwitterService().page(searchTerm, maxId, sinceId).enqueue(new Callback<SearchResponse>() {
+        searchTerm = editText.getText().toString();
+        if (!searchTerm.equals("")) {
+            TwitterServiceBuilder.getTwitterService().search(searchTerm).enqueue(new Callback<SearchResponse>() {
                 @Override
                 public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-                    sinceId = response.body().getMetadata().getSinceId();
-                    nextResults = response.body().getMetadata().getNextResults();
-
-                    Uri results = Uri.parse(nextResults);
-                    maxId = results.getQueryParameter("max_id");
-
-                    for (Status status : response.body().getStatuses()) {
-                        MyTweet myResult = new MyTweet();
-                        myResult.text = status.getText();
-                        myResult.name = status.getUser().getName();
-                        myResult.screenName = "@" + status.getUser().getScreenName();
-                        myResult.imgUrl = status.getUser().getProfileImageUrl();
-                        data.add(myResult);
-                        adapter.notifyDataSetChanged();
-                    }
-                    paging = false;
-                    progressBar.setVisibility(View.GONE);
+                    maxId = response.body().getMetadata().getMaxId();
+                    handleResults(response);
                 }
 
                 @Override
@@ -118,9 +106,41 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("Twitter", t.toString());
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+    }
+
+    /**
+     * Request next set of results
+     */
+    private void pageTwitter() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        retrofit2.Call v = TwitterServiceBuilder.getTwitterService().page(searchTerm, maxId, sinceId);
+        TwitterServiceBuilder.getTwitterService().page(searchTerm, maxId, sinceId).enqueue(new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                String nextResults = response.body().getMetadata().getNextResults();
+                Uri results = Uri.parse(nextResults);
+                maxId = results.getQueryParameter("max_id");
+
+                handleResults(response);
+            }
+
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+                Log.d("Twitter", t.toString());
+            }
+        });
+    }
+
+    private void handleResults(Response<SearchResponse> response) {
+        sinceId = response.body().getMetadata().getSinceId();
+        for (Status status : response.body().getStatuses()) {
+            data.add(getMyTweet(status));
+            adapter.notifyDataSetChanged();
+        }
+        paging = false;
+        progressBar.setVisibility(View.GONE);
     }
 
     /**
@@ -134,37 +154,13 @@ public class MainActivity extends AppCompatActivity {
         searchTwitter();
     }
 
-    /**
-     * Queries against the indices of recent or popular Tweets using editText value
-     */
-    private void searchTwitter() {
-        data.clear();
-        adapter.notifyDataSetChanged();
-        progressBar.setVisibility(View.VISIBLE);
-        searchTerm = editText.getText().toString();
-        if (!searchTerm.equals("")) {
-            TwitterServiceBuilder.getTwitterService().search(searchTerm).enqueue(new Callback<SearchResponse>() {
-                @Override
-                public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-                    maxId = response.body().getMetadata().getMaxId();
-                    sinceId = response.body().getMetadata().getSinceId();
-                    for (Status status : response.body().getStatuses()) {
-                        MyTweet myResult = new MyTweet();
-                        myResult.text = status.getText();
-                        myResult.name = status.getUser().getName();
-                        myResult.screenName = "@" + status.getUser().getScreenName();
-                        myResult.imgUrl = status.getUser().getProfileImageUrl();
-                        data.add(myResult);
-                        adapter.notifyDataSetChanged();
-                    }
-                    progressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(Call<SearchResponse> call, Throwable t) {
-                    Log.d("Twitter", t.toString());
-                }
-            });
-        }
+    @NonNull
+    private MyTweet getMyTweet(Status status) {
+        return new MyTweet.Builder()
+                        .text(status.getText())
+                        .name(status.getUser().getName())
+                        .screenName(status.getUser().getScreenName())
+                        .image(status.getUser().getProfileImageUrl())
+                        .build();
     }
 }
